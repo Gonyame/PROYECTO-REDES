@@ -42,17 +42,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7fe11018b0363e64f832a801e037bcbe,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7fe11018b0363e64f832a801e037bcbe,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7fe11018b0363e64f832a801e037bcbe,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7fe11018b0363e64f832a801e037bcbe,
         type: 3}
@@ -107,6 +107,11 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7fe11018b0363e64f832a801e037bcbe,
         type: 3}
       propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7fe11018b0363e64f832a801e037bcbe,
+        type: 3}
+      propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -199,7 +204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 1336299925555855304, guid: fbd2036e48664cf4293ce00a3247bf38,
     type: 3}
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 706527720744812445}
   fireRate: 1
   detectionRange: 5
   rotationSpeed: 2

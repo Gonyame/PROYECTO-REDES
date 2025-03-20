@@ -101,7 +101,6 @@ GameObject:
   - component: {fileID: 2294651464457849967}
   - component: {fileID: 2253338177511322681}
   - component: {fileID: 7138122094363932739}
-  - component: {fileID: 3411919378350043872}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -118,7 +117,7 @@ Transform:
   m_GameObject: {fileID: 1272872487539807941}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.08, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -227,6 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a01df1329eccb4b9715c362cf18760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
   currentHealth: 100
 --- !u!114 &959132108836814071
 MonoBehaviour:
@@ -240,7 +240,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f0395410af2ed45aba550ed3d3f7c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pSpeed: 5
+  speed: 5
+  groundCheckDistance: 0.4
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  maxVerticalSpeed: 10
+  fallMultiplier: 2.5
+  jumpForce: 7
+  canJump: 1
+  movementSmoothing: 0.05
+  isGrounded: 0
 --- !u!114 &2294651464457849967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,33 +295,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7680066456879020692, guid: 59662a8b8aa922645843f8921c397a6a,
     type: 3}
   aimPoint: {fileID: 5013442557450890250}
-  bSpeed: 5
---- !u!143 &3411919378350043872
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1272872487539807941}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 10
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  bSpeed: 8
 --- !u!1 &1713083323002711866
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,7 +689,7 @@ Transform:
   m_GameObject: {fileID: 8211182797527041497}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.654}
+  m_LocalPosition: {x: 0, y: 1.13, z: 1.294}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

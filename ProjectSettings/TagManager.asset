@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Floor
+  - Enemy
+  - Undefined
+  - Bullet
   layers:
   - Default
   - TransparentFX
