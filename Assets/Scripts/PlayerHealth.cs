@@ -1,36 +1,57 @@
 using UnityEngine;
 using Photon.Pun;
 
+// Clase que maneja la salud del jugador en la red
+// Gestiona el daño recibido, curación y muerte del personaje
+// Utiliza PhotonView para sincronizar el estado de salud entre todos los jugadores
 public class PlayerHealth : MonoBehaviourPun
 {
-    public int currentHealth = 100; // Vida inicial del jugador
+    // Salud máxima del jugador
+    public int maxHealth = 100;
+    // Salud actual del jugador
+    public int currentHealth;
 
     // Evento para notificar cambios en la vida
     public System.Action<int> onHealthChanged;
 
-    void Start()
+    // Inicializa la salud del jugador al valor máximo
+    private void Start()
     {
-        onHealthChanged?.Invoke(currentHealth); // Notificar el estado inicial de la salud
+        currentHealth = maxHealth;
+        onHealthChanged?.Invoke((int)currentHealth); // Notificar el estado inicial de la salud
     }
 
+    // Intenta curar al jugador por la cantidad especificada
+    // Retorna true si la curación fue exitosa, false si el jugador ya tiene la salud máxima
+    public bool Heal(int amount)
+    {
+        if (currentHealth < maxHealth)
+        {
+            currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+            Debug.Log($"Player healed for {amount}. Current health: {currentHealth}");
+            return true;
+        }
+        return false;
+    }
+
+    // Método llamado a través de la red cuando el jugador recibe daño
+    // Solo se procesa si es el jugador local
     [PunRPC]
     public void TakeDamage(int damage)
     {
         if (photonView.IsMine)
         {
-            currentHealth -= damage;
-            currentHealth = Mathf.Max(0, currentHealth); // Evitar valores negativos
-            
-            // Notificar el cambio de vida
-            onHealthChanged?.Invoke(currentHealth);
+            currentHealth = Mathf.Max(currentHealth - damage, 0);
+            onHealthChanged?.Invoke((int)currentHealth); // Notificar el cambio de vida
 
             if (currentHealth <= 0)
             {
-                GameOver();
+                Die();
             }
         }
     }
 
+    // Detecta colisiones con objetos marcados como "Bullet" y aplica daño
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bullet"))
@@ -41,10 +62,12 @@ public class PlayerHealth : MonoBehaviourPun
         }
     }
 
-    void GameOver()
+    // Maneja la muerte del jugador
+    // Destruye el objeto del jugador en la red y muestra la pantalla de fin de juego
+    private void Die()
     {
+        Debug.Log("Player died!");
         // Lógica de fin de juego
-        Debug.Log("Game Over");
         if (photonView.IsMine)
         {
             PhotonNetwork.Destroy(gameObject); // Destruir el objeto del jugador en la red

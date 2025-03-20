@@ -1,60 +1,127 @@
 using UnityEngine;
 using Photon.Pun;
 
+/// <summary>
+/// Controla el comportamiento de las balas en el juego multijugador.
+/// Hereda de MonoBehaviourPun para la funcionalidad en red.
+/// </summary>
 public class Bullet : MonoBehaviourPun
 {
-    // Velocidad de la bala
-    private float speed;
+    /// <summary>
+    /// Velocidad de movimiento de la bala.
+    /// </summary>
+    public float speed;
 
-    // Dueño de la bala (jugador que la disparó)
-    private Photon.Realtime.Player owner;
+    /// <summary>
+    /// Referencia al jugador que disparó la bala.
+    /// </summary>
+    public Photon.Realtime.Player owner;
 
-    // Método para inicializar la bala
+    /// <summary>
+    /// Inicializa la bala con los parámetros especificados.
+    /// </summary>
+    /// <param name="bulletSpeed">Velocidad inicial de la bala</param>
+    /// <param name="bulletOwner">Jugador que disparó la bala</param>
     public void Initialize(float bulletSpeed, Photon.Realtime.Player bulletOwner)
     {
-        speed = bulletSpeed; // Asigna la velocidad
-        owner = bulletOwner; // Asigna el dueño
+        speed = bulletSpeed; 
+        owner = bulletOwner; 
     }
 
+    /// <summary>
+    /// Se ejecuta al crear la bala. Programa su destrucción automática después de 1 segundo.
+    /// Solo se ejecuta en la instancia del propietario de la bala.
+    /// </summary>
     void Start()
     {
-        // Solo el dueño del PhotonView ejecuta esta lógica
         if (photonView.IsMine)
         {
-            // Programa la destrucción de la bala después de 1 segundo
-            Invoke("DestroyBullet", 1f);
+            Invoke("DestroyBullet", 1.5f);
         }
     }
 
+    /// <summary>
+    /// Actualiza la posición de la bala cada frame.
+    /// Solo se ejecuta en la instancia del propietario de la bala.
+    /// </summary>
     void Update()
     {
-        // Solo el dueño del PhotonView ejecuta esta lógica
         if (photonView.IsMine)
         {
-            // Mueve la bala hacia adelante en su dirección actual
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
     }
 
+    /// <summary>
+    /// Maneja las colisiones de la bala con otros objetos.
+    /// Detecta impactos con enemigos y aplica daño.
+    /// </summary>
+    /// <param name="other">Colisionador del objeto impactado</param>
     void OnTriggerEnter(Collider other)
     {
-        // Solo el dueño del PhotonView ejecuta esta lógica
         if (photonView.IsMine)
         {
-            // Verifica si la bala chocó con algo que no sea el jugador
             if (!other.CompareTag("Player"))
             {
-                DestroyBullet(); // Destruye la bala
+                if (other.CompareTag("Enemy"))
+                {
+                    EnemyShooter enemyShooter = other.gameObject.GetComponent<EnemyShooter>();
+                    if (enemyShooter != null)
+                    {
+                        PhotonView enemyPhotonView = enemyShooter.photonView;
+                        if (enemyPhotonView != null)
+                        {
+                            // Debug información del PhotonView
+                            Debug.Log($"Enemy PhotonView - ViewID: {enemyPhotonView.ViewID}, IsMine: {enemyPhotonView.IsMine}");
+                            
+                            if (enemyPhotonView.ViewID != 0)  // Solo verificamos el ViewID
+                            {
+                                enemyPhotonView.RPC("TakeDamage", RpcTarget.All, 10f);
+                                Debug.Log($"Hit enemy. PhotonView ID: {enemyPhotonView.ViewID}");
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"PhotonView ViewID is 0 on enemy: {enemyShooter.gameObject.name}");
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError($"No PhotonView component found on enemy: {enemyShooter.gameObject.name}");
+                        }
+                        DestroyBullet();
+                    }
+                    else
+                    {
+                        Debug.LogError($"No EnemyShooter component found on enemy object: {other.gameObject.name}");
+                        DestroyBullet();
+                    }
+                }
+                if (other.CompareTag("Wall"))
+                {
+                    Debug.Log("Hit wall");
+                    DestroyBullet();
+                }
+                if (other.CompareTag("Obstacle"))
+                {
+                    Debug.Log("Hit obstacle");
+                    DestroyBullet();
+                }
+                else
+                {
+                    DestroyBullet();
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Destruye la bala en la red.
+    /// Solo se ejecuta en la instancia del propietario de la bala.
+    /// </summary>
     void DestroyBullet()
     {
-        // Solo el dueño del PhotonView ejecuta esta lógica
         if (photonView.IsMine)
         {
-            // Destruye la bala en la red
             PhotonNetwork.Destroy(gameObject);
         }
     }
