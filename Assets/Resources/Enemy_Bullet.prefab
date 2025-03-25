@@ -15,10 +15,10 @@ GameObject:
   - component: {fileID: 3055248916707333710}
   - component: {fileID: 8666397107187657410}
   - component: {fileID: -2941418076348745237}
-  - component: {fileID: 7685657381075417982}
+  - component: {fileID: -1993420774811861981}
   m_Layer: 0
   m_Name: Enemy_Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,10 +172,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
+  m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &7685657381075417982
+--- !u!114 &-1993420774811861981
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1336299925555855304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73591b09cbeb9f74295678065858cefe, type: 3}
+  m_Script: {fileID: 11500000, guid: 74399036a251cb54f9d8f810f8c089ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10

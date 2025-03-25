@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Floor
   - Bullet
+  - Enemy
+  - Bullet_2
   layers:
   - Default
   - TransparentFX
@@ -13,7 +15,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
