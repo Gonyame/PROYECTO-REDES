@@ -345,19 +345,19 @@ public class EnemyShooter : MonoBehaviourPun
 
     void OnDrawGizmos()
     {
-        // Dibujar área de detección
+        // Dibujar área de detección desde el centro del enemigo
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
-        // Dibujar rango de patrulla
+        // Dibujar rango de patrulla (si aplica)
         if (patrolType == PatrolType.LeftRight)
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(startPosition - Vector3.right * patrolDistance, 
-                           startPosition + Vector3.right * patrolDistance);
+                            startPosition + Vector3.right * patrolDistance);
         }
 
-        // Dibujar raycast de detección de suelo
+        // Dibujar raycast de detección de suelo desde el centro
         Gizmos.color = Color.green;
         Gizmos.DrawRay(transform.position + Vector3.up, Vector3.down * groundCheckDistance);
     }

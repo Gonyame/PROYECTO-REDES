@@ -1,36 +1,82 @@
 using UnityEngine;
 using Photon.Pun;
-using System;
 
 public class CharacterMovement : MonoBehaviourPun
 {
-    [Header("Settings: Move")]
-    [SerializeField] float pSpeed = 1;
+    [Header("Movement Settings")]
+    public float speed = 5f;
+    public float groundCheckDistance = 0.4f;
+    public LayerMask groundLayer;
+    public float maxVerticalSpeed = 10f; // Límite de velocidad vertical
+    public float fallMultiplier = 2.5f;  // Multiplicador de caída
 
+    [Header("Movement Smoothing")]
+    public float movementSmoothing = 0.05f;
 
-    [Header("References")]
-    CharacterController controller;
+    private Rigidbody rb;
+    private Vector3 currentVelocity;
+    private bool isGrounded;
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.useGravity = true;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (photonView.IsMine)
-        {
-            float x = Input.GetAxisRaw("Horizontal");
-            float z = Input.GetAxisRaw("Vertical");
+        if (!photonView.IsMine) return;
 
-
-            Vector3 dir = new Vector3(x, 0f, z);
-            if(dir.magnitude > 0)
-            {
-                dir.Normalize();
-                controller.Move(dir * pSpeed * Time.deltaTime);
-            } 
-        }
+        CheckGrounded();
+        HandleMovement();
+        LimitVerticalSpeed();
     }
 
+    void CheckGrounded()
+    {
+        // Dibuja el Raycast en la escena para depuración
+        Debug.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance, Color.red);
+
+        // Realiza el Raycast para verificar si está tocando el suelo
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+    }
+
+    void HandleMovement()
+    {
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
+
+        Debug.Log($"Input: Horizontal={moveX}, Vertical={moveZ}");
+
+        Vector3 targetVelocity = new Vector3(moveX, 0, moveZ).normalized * speed;
+        targetVelocity.y = rb.velocity.y;
+
+        if (!isGrounded)
+        {
+            rb.AddForce(Vector3.down * fallMultiplier, ForceMode.Acceleration);
+        }
+
+        rb.velocity = Vector3.SmoothDamp(
+            rb.velocity,
+            targetVelocity,
+            ref currentVelocity,
+            isGrounded ? movementSmoothing : movementSmoothing * 2
+        );
+
+        Debug.Log($"Velocity: {rb.velocity}");
+    }
+
+    void LimitVerticalSpeed()
+    {
+        Vector3 velocity = rb.velocity;
+        velocity.y = Mathf.Clamp(velocity.y, -maxVerticalSpeed, maxVerticalSpeed);
+        rb.velocity = velocity;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+    }
 }

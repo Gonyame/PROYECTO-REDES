@@ -947,7 +947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcafb79dc0ab6d48b227da40838ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxIntPlayers: 2
+  maxIntPlayers: 4
 --- !u!1 &1294519100
 GameObject:
   m_ObjectHideFlags: 0
