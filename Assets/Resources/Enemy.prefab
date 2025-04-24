@@ -522,21 +522,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc767cbf8ac542b419135345c1d12187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 1336299925555855304, guid: fbd2036e48664cf4293ce00a3247bf38,
+  projectilePrefab: {fileID: 3223313320989150622, guid: 84b35213937f2fd42a64a751eb94c919,
     type: 3}
   firePoint: {fileID: 706527720744812445}
   fireRate: 1
   detectionRange: 5
   rotationSpeed: 2
-  patrolType: 2
-  patrolSpeed: 2
-  patrolDistance: 5
-  groundCheckDistance: 1.5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  obstacleCheckDistance: 5
-  maxHealth: 100
 --- !u!136 &5765300910801614554
 CapsuleCollider:
   m_ObjectHideFlags: 0
