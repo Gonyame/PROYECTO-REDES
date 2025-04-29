@@ -16,6 +16,7 @@ public class EnemyShooter : MonoBehaviourPun
 
     private float nextFireTime = 0f;
     private GameObject targetPlayer;
+    [SerializeField] AudioSource audioPew;
 
     private void Start()
     {
@@ -116,6 +117,7 @@ public class EnemyShooter : MonoBehaviourPun
             {
                 projectileComponent.SetDirection(direction);
                 Debug.Log("Proyectil disparado hacia: " + direction);
+                audioPew.Play();
             }
         }
         catch (System.Exception e)

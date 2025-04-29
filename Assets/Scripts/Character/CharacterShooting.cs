@@ -9,6 +9,7 @@ public class CharacterShooting : MonoBehaviourPun
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] Transform aimPoint;
     [SerializeField] float bSpeed;
+    [SerializeField] AudioSource audioPewpew;
 
     // Update is called once per frame
     void Update()
@@ -27,5 +28,6 @@ public class CharacterShooting : MonoBehaviourPun
 
         //Inicializa la bala con la velocidad y el dueño (jugador que disparo)
         bullet.GetComponent<Bullet>().Initialize(bSpeed, photonView.Owner);
+        audioPewpew.Play();
     }
 }
